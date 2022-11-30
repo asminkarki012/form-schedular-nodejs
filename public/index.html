@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Form</title>
+  </head>
+  <body>
+    <div id="time-now"></div>
+    <div class="flex flex-col justify-center items-center h-screen w-full">
+      <div id="clock" class="text-lg font-mono py-4"></div>
+      <form
+        action=""
+        class="flex flex-col justify-center items-center p-12 gap-4 border rounded-md"
+        id="myForm"
+      >
+        <h1 class="text-xl">Today's update</h1>
+        <div id="form-msg" class="text-md"></div>
+
+        <div class="bg-grey-200 flex flex-col gap-4">
+          <input
+            type="email"
+            class="border"
+            id="submit-email"
+            placeholder="Email"
+          />
+          <input
+            type="text"
+            class="border"
+            id="submit-title"
+            placeholder="Title"
+          />
+          <textarea
+            name=""
+            id="submit-desc"
+            cols="30"
+            rows="10"
+            class="border"
+            placeholder="Description"
+          ></textarea>
+        </div>
+        <div class="flex gap-4">
+          <button type="reset" class="border hover:bg-gray-400 px-4 rounded-md">
+            Clear
+          </button>
+          <button
+            type="submit"
+            class="border hover:bg-gray-400 px-4 rounded-md"
+            id="submit-btn"
+          >
+            Submit
+          </button>
+        </div>
+
+        <div id="msg" class="my-2">
+        </div>
+      </form>
+    </div>
+
+    <script src="./js/moment.min.js"></script>
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/main.js"></script>
+    <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+  </body>
+</html>
