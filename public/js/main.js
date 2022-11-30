@@ -67,7 +67,7 @@ submitBtn.addEventListener("click", (e) => {
   submitEmail.value = "";
   submitTitle.value = "";
   submitDesc.value = "";
-  responseMsg.value ="";
+  responseMsg.innerHTML ="";
   //   axios
   //     .post("/api/formsubmit", {
   //       userData: JSON.stringify(userData),
