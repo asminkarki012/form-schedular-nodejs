@@ -133,3 +133,4 @@ setInterval(() => {
 setInterval(() => {
   displayTime();
 }, 1000);
+timeValidation();
