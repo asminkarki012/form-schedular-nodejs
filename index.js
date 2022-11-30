@@ -22,8 +22,8 @@ app.use(express.static("public"));
 app.use("/api/formsubmit", formsubmitRoute);
 
 //setting up cron tab to send mail everyday exact @ 5pm
-cron.schedule("56 14 * * *", () => {
-  console.log("Running everday at 5pm");
+cron.schedule("45 17 * * *", () => {
+  console.log("Running everday at 5.45pm");
   sendMailToUser();
 });
 
