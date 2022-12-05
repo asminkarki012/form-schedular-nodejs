@@ -5,40 +5,51 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Form</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>Today's Update</title>
   </head>
   <body>
-    <div id="time-now"></div>
-    <div class="flex flex-col justify-center items-center h-screen w-full">
-      <div id="clock" class="text-lg font-mono py-4"></div>
+    <div class="flex flex-col justify-center items-center h-screen">
+      <div
+        id="clock-container"
+        class="bg-[#F3F3F3] my-2 px-8 py-2 border-4 border-red-300"
+      >
+        <div
+          id="clock"
+          class="text-xl font-mono py-2 px-12 bg-[#DDDDDD] rounded-lg border-2 border-violet-300"
+        ></div>
+      </div>
       <form
         action=""
-        class="flex flex-col justify-center items-center p-12 gap-4 border rounded-md"
+        class="flex flex-col justify-center items-center px-12 py-2 w-84 gap-2 border rounded-md"
         id="myForm"
       >
         <h1 class="text-xl">Today's update</h1>
-        <div id="form-msg" class="text-md"></div>
+        <div id="form-msg" class="text-sm"></div>
 
-        <div class="bg-grey-200 flex flex-col gap-4">
+        <div class="bg-grey-200 flex flex-col gap-4 w-80">
           <input
             type="email"
-            class="border"
+            class="border p-2 rounded-md"
             id="submit-email"
             placeholder="Email"
+            required
           />
           <input
             type="text"
-            class="border"
+            class="border p-2 rounded-md"
             id="submit-title"
             placeholder="Title"
+            required
           />
           <textarea
             name=""
             id="submit-desc"
             cols="30"
             rows="10"
-            class="border"
+            class="border p-2 rounded-md"
             placeholder="Description"
+            required
           ></textarea>
         </div>
         <div class="flex gap-4">
@@ -54,11 +65,24 @@
           </button>
         </div>
 
-        <div id="msg" class="my-2">
-        </div>
+        <button
+          type="button"
+          class="border hover:bg-gray-400 px-4 rounded-md"
+          id="fetchdata-btn"
+        >
+          Fetch Data
+        </button>
+
+        <p id="msg" class="my-2"></p>
       </form>
     </div>
 
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.11.0/qs.min.js"
+      integrity="sha512-/l6vieC+YxaZywUhmqs++8uF9DeMvJE61ua5g+UK0TuHZ4TkTgB1Gm1n0NiA86uEOM9JJ6JUwyR0hboKO0fCng=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script src="./js/moment.min.js"></script>
     <script src="./js/axios.min.js"></script>
     <script src="./js/main.js"></script>

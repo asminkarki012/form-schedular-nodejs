@@ -1,9 +1,12 @@
 const bodyParser = require("body-parser");
+const path = require("path");
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 require("dotenv").config();
 const formsubmitRoute = require("./routes/formsubmit");
+const authRoute = require("./routes/auth");
+const fetchDataRoute = require("./routes/fetchdata");
 const cron = require("node-cron");
 const sendMailToUser = require("./controllers/sendMail");
 
@@ -17,13 +20,22 @@ async function main() {
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static("public"));
 
 app.use("/api/formsubmit", formsubmitRoute);
 
+app.use("/api/auth", authRoute);
+
+app.use("/api/fetchdata", fetchDataRoute);
+
+// console.log(path.join(__dirname, "public/auth.html"));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/auth.html"));
+});
+
+app.use(express.static(path.join(__dirname, "public")));
 //setting up cron tab to send mail everyday exact @ 5pm
-cron.schedule("56 14 * * *", () => {
-  console.log("Running everday at 5pm");
+cron.schedule("45 17 * * *", () => {
+  console.log("Running everday at 5.45pm");
   sendMailToUser();
 });
 

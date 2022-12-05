@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+// const { Schema } = require("mongoose");
 
 const FormSchema = new mongoose.Schema(
   {
@@ -7,14 +8,13 @@ const FormSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    title: {
-      type: String,
-      required: true,
-    },
-    desc: {
-      type: String,
-      required: true,
-    },
+    content: [
+      {
+        title:String,
+        desc:String
+       
+      },
+    ],
   },
   { timestamps: true }
 );

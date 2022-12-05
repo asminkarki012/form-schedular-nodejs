@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Today's Update</title>
+  </head>
+  <body>
+    <div
+      id="container"
+      class="flex justify-center items-center h-screen w-screen bg-slate-200"
+    >
+      <div id="form-image-container" class="flex w-88">
+        <div
+          id="form-container"
+          class="bg-white flex flex-col items-center justify-center w-1/2 rounded-l-md"
+        >
+          <form class="flex flex-col gap-4">
+            <div class="flex flex-col justify-center items-center gap-4">
+              <h1 class="text-[#FF5455] font-semibold text-3xl">
+                Create Account
+              </h1>
+              <small>or use your email for registration:</small>
+            </div>
+
+            <input
+              type="email"
+              class="border py-2 pl-4 rounded-md bg-gray-100"
+              id="auth-email"
+              placeholder="Email"
+              required
+            />
+            <input
+              type="password"
+              class="border py-2 pl-4 rounded-md bg-gray-100"
+              id="auth-password"
+              placeholder="Password"
+              required
+            />
+
+            <p id="response-message" class="text-sm text-center">
+              This is where to display auth message
+            </p>
+            <div class="flex gap-4 justify-center my-1">
+              <button
+                id="signup-btn"
+                class="bg-[#FF5455] px-16 py-2 text-white text-md font-semibold rounded-lg hover:bg-red-500"
+              >
+                Sign Up
+              </button>
+              <button
+                id="signin-btn"
+                class="bg-white px-16 py-2 text-[#FF5455] text-md font-semibold border-2 border-red-400 rounded-lg hover:bg-gray-200"
+              >
+                Sign In
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="image-container" class="bg-white">
+          <img src="./assets/login-bg.jpg" class="rounded-md" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <!-- <script src="./js/main.js"></script> -->
+    <script src="./js/register.js"></script>
+  </body>
+</html>

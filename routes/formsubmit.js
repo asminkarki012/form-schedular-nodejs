@@ -6,14 +6,14 @@ const moment = require("moment");
 // to post form data in db
 router.post("/", async (req, res) => {
   try {
+    console.log(req.body);
     const formExists = await Form.findOne({ email: req.body.email });
-    if (!formExists) {
-      console.log(req.body);
-      console.log(req.body.email);
-      const newForm = new Form(req.body);
-      let time = moment().format("hh mm ss a");
+    
+    // console.log(req.body.content);
+    if (formExists) {
+      // let time = moment().format("hh mm ss a");
       // time validation
-      // let time = "05 40 00 pm";
+      let time = "05 40 00 pm";
       time = time.split(" ");
       hh = parseInt(time[0]);
       mm = parseInt(time[1]);
@@ -23,24 +23,31 @@ router.post("/", async (req, res) => {
         if (mm >= 30 && mm <= 59) {
           if ((ss >= 00 && ss <= 59) || ss === 00) {
             if (day === "pm") {
-              await newForm.save();
+              newContent = await Form.findOneAndUpdate({email:req.body.email},
+                {
+                  $push: { content: req.body.content },
+                },
+                { new: true }
+              );
               res.status(200).json({
                 message: "Form Submitted Successfully",
-                data: newForm,
+                data: newContent,
               });
             }
           }
         }
       } else {
-        res.status(400).json({
-          message: "Error!! You can only submit form between 5:30pm and 6pm",
-        });
+        res
+          .status(400)
+          .json({
+            message: "Error!! You can only submit form between 5:30pm and 6pm",
+          });
       }
     } else {
-      res.status(400).json({ message: "Form Already exists" });
+      res.status(400).json({ message: "Form doesnot exist" });
     }
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json(error.message);
   }
 });
 
