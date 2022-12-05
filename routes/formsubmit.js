@@ -11,9 +11,9 @@ router.post("/", async (req, res) => {
     
     // console.log(req.body.content);
     if (formExists) {
-      // let time = moment().format("hh mm ss a");
+      let time = moment().format("hh mm ss a");
       // time validation
-      let time = "05 40 00 pm";
+      // let time = "05 40 00 pm";
       time = time.split(" ");
       hh = parseInt(time[0]);
       mm = parseInt(time[1]);
