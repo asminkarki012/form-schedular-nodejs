@@ -1,4 +1,7 @@
 console.log("auth handler");
+
+//to clear all the jwt token in localstorage
+localStorage.clear();
 const authEmail = document.getElementById("auth-email");
 const authPassword = document.getElementById("auth-password");
 
@@ -11,9 +14,10 @@ signInBtn.addEventListener("click", signInHandler);
 const responseMsg = document.getElementById("response-message");
 
 const loaderContainer = document.querySelector(".loader-container");
-window.addEventListener("load",()=>{
+
+window.addEventListener("load", () => {
   loaderContainer.style.display = "none";
-})
+});
 //display loading spinner on page load
 // window.addEventListener("load", () => {
 //   document.body.style.display = "none";
@@ -23,7 +27,6 @@ window.addEventListener("load",()=>{
 
 // });
 
-
 function signUpHandler(event) {
   event.preventDefault();
   // for signup
@@ -31,6 +34,7 @@ function signUpHandler(event) {
     email: authEmail.value,
     password: authPassword.value,
   };
+
   fetch("/api/auth/signup", {
     method: "POST",
     headers: {
@@ -50,7 +54,7 @@ function signUpHandler(event) {
     })
     .catch((err) => {
       console.log(err);
-      responseMsg.innerHTML = `${JSON.stringify(err.message)}`;
+      responseMsg.innerHTML = `${err.message}`;
     });
 
   authEmail.value = "";
@@ -64,7 +68,8 @@ function signInHandler(event) {
     email: authEmail.value,
     password: authPassword.value,
   };
-  const url = `http://localhost:8000/index.html?email=${userData.email}`;
+
+  const url = `http://localhost:8000/formpage.html`;
   let checkResponseStatus = 0;
   // for signin
   fetch("/api/auth/signin", {
@@ -85,22 +90,22 @@ function signInHandler(event) {
     })
     .then((data) => {
       console.log("success", data);
-      console.log("success", data.accessToken);
       const accessToken = data.accessToken;
+      const refreshToken = data.refreshToken;
 
-      if (checkResponseStatus === 200 && accessToken) {
-        window.location.href = url;
+      if (checkResponseStatus === 200 && accessToken && refreshToken) {
+
+        localStorage.setItem("email", userData.email);
         localStorage.setItem("accessToken", data.accessToken);
-
-        responseMsg.innerHTML = `<p class="text-blue-500">${data.message}</p>`;
+        localStorage.setItem("refreshToken", data.refreshToken);
+        responseMsg.innerHTML = `${data.message}`;
+        window.location.href = url;
       }
-      // responseMsg.innerHTML = data.message
+      responseMsg.innerHTML = `${data.message}`;
     })
     .catch((err) => {
       console.error(err);
-      responseMsg.innerHTML = `<p class="text-red-500">${JSON.stringify(
-        err.message
-      )}</p>`;
+      responseMsg.innerHTML = `${err.message}`;
     });
 
   authEmail.value = "";

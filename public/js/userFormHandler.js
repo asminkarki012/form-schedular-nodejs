@@ -1,71 +1,74 @@
-const { email } = Qs.parse(location.search, {
-  ignoreQueryPrefix: true,
-});
+// const { email } = Qs.parse(location.search, {
+//   ignoreQueryPrefix: true,
+// });
 
-let accessToken = localStorage.getItem("accessToken");
+const email = localStorage.getItem("email");
+let refreshToken = localStorage.getItem("refreshToken");
 
+const submitBtn = document.getElementById("submit-btn");
+const clearBtn = document.getElementById("clear-btn");
+const fetchDataBtn = document.getElementById("fetchdata-btn");
 const loaderContainer = document.querySelector(".loader-container");
+
+
 window.addEventListener("load", () => {
   loaderContainer.style.display = "none";
 });
 console.log("this is for formsubmit route");
 console.log(email);
+
 function displayTime() {
   let clock = moment().format("hh:mm:ss A");
   const getClock = document.getElementById("clock");
   getClock.innerHTML = clock;
 }
 
-const submitBtn = document.getElementById("submit-btn");
+
 submitBtn.addEventListener("click", formHandler);
+
 
 function routeHandler() {
   const url = `http://localhost:8000/`;
-  console.log("Routehandler for every 5 second");
-
+  let accessToken = localStorage.getItem("accessToken");
+  const userData = { email: email, refreshToken: refreshToken };
+  console.log("Routehandler for every 50 second");
 
   if (!accessToken) {
-    
-    window.location.href=url;
-
-
+    window.location.href = url;
+    return;
   }
 
-    //call refresh token function to get access token
+  //get refresh token function to get new accesstoken
+  fetch("/api/auth/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log("success", data.response.accessToken);
+      accessToken = data.response.accessToken;
 
-  // fetch("/api/auth/token", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
+      //set new accesstoken
+      localStorage.setItem("accessToken", accessToken);
+    })
+    .catch((err) => {
+      console.error(err.message);
+    });
 
-  //   },
-  //   body: JSON.stringify(userData),
-  // })
-  //   .then((response) => {
-  //     return response.json();
-  //   })
-  //   .then((data) => {
-  //     console.log("success", data);
-
-
-  //   })
-  //   .catch((err) => {
-  //     console.error(err);
-  //     responseMsg.innerHTML = `<p class="text-red-500">${JSON.stringify(
-  //       err.message
-  //     )}</p>`;
-  //   });
-
-
-
-
-  //delete access token
-  localStorage.removeItem("accessToken");
+  //delete refresh token
+  // localStorage.removeItem("accessToken");
 }
 routeHandler();
 
 function formHandler(e) {
   e.preventDefault();
+
+  let accessToken = localStorage.getItem("accessToken");
   const responseMsg = document.getElementById("msg");
   const submitTitle = document.getElementById("submit-title");
   const submitDesc = document.getElementById("submit-desc");
@@ -78,7 +81,7 @@ function formHandler(e) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      "Authorization": `Bearer ${accessToken}`,
     },
     body: JSON.stringify(userData),
   })
@@ -107,9 +110,9 @@ function timeValidation() {
   const formMsg = document.getElementById("form-msg");
   const submitEmail = document.getElementById("submit-email");
   //getting time for validation
-  let time = moment().format("hh mm ss a");
+  // let time = moment().format("hh mm ss a");
 
-  // let time = "05 40 00 pm";
+  let time = "05 40 00 pm";
   time = time.split(" ");
   hh = parseInt(time[0]);
   mm = parseInt(time[1]);
@@ -134,13 +137,14 @@ function timeValidation() {
       elements[i].classList.add("bg-gray-200");
     }
     submitBtn.disabled = true;
+    clearBtn.disabled = true;
+    fetchDataBtn.disabled = true;
   }
 }
 
-const fetchDataBtn = document.getElementById("fetchdata-btn");
 
 fetchDataBtn.addEventListener("click", () => {
-  const url = `http://localhost:8000/fetchdata.html?email=${email}`;
+  const url = `http://localhost:8000/fetchdata.html`;
 
   window.location.href = url;
 });
@@ -161,3 +165,9 @@ timeValidation();
 setInterval(() => {
   routeHandler();
 }, 50000);
+
+const logoutBtn = document.getElementById("logout-btn");
+logoutBtn.addEventListener("click", () => {
+  localStorage.clear();
+  routeHandler();
+});

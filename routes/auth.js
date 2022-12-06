@@ -2,7 +2,6 @@ const router = require("express").Router();
 const User = require("../models/User");
 const Form = require("../models/Form");
 const bcrypt = require("bcrypt");
-const verifyToken = require("../controllers/middleware");
 const jwt = require("jsonwebtoken");
 const tokenList = {};
 
@@ -59,26 +58,27 @@ router.post("/signin", async (req, res) => {
     }
     // console.log(user);
     const { password, ...other } = user._doc;
-    const accessToken = jwt.sign({ user: user }, "secretkey", {
+    const accessToken = jwt.sign({ user: other }, "secretkey", {
       expiresIn: "50s",
     });
 
-    // const refreshToken = jwt.sign({ user: other }, "refreshtokensecret", {
-    //   expiresIn: "1h",
-    // });
+    const refreshToken = jwt.sign({ user: other }, "refreshtokensecret", {
+      expiresIn: "1h",
+    });
 
+    const response = {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    };
 
-    // const response = {
-    //   token: token,
-    //   refreshToken: refreshToken,
-    // };
-
-    // tokenList[refreshToken] = response;
+    tokenList[refreshToken] = response;
+    // console.log(tokenList);
 
     res.status(200).json({
       message: `<p class="text-blue-500">${user.email} sign in successfully</p>`,
-      data: user,
-      accessToken
+      data: other,
+      accessToken,
+      refreshToken
     });
   } catch (err) {
     res
@@ -89,18 +89,19 @@ router.post("/signin", async (req, res) => {
 
 //refresh token
 router.post("/token", async (req, res) => {
+  // in body email and refresh token is required 
+
   const postData = req.body;
   const user = await User.findOne({ email: postData.email });
   const { password, ...other } = user._doc;
-  console.log(tokenList);
+  // console.log(tokenList);
 
   if (postData.refreshToken && postData.refreshToken in tokenList) {
-    const token = jwt.sign({ user: other }, "secretkey", { expiresIn: "50s" });
+    const accessToken = jwt.sign({ user: other }, "secretkey", { expiresIn: "50s" });
     const response = {
-      token: token,
+      accessToken: accessToken,
     };
-    tokenList[postData.refreshToken].token = token;
-    console.log(tokenList);
+    tokenList[postData.refreshToken].accessToken = accessToken;
     res.status(200).json({ response, msg: "Refresh JWT working" });
   } else {
     res.status(403).json("Forbidden");

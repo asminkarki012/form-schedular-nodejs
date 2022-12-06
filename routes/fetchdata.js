@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Form = require("../models/Form");
 const verifyToken = require("../controllers/middleware");
 
-router.get("/:email", async (req, res) => {
+router.get("/:email", verifyToken ,async (req, res) => {
   try {
     const formExists = await Form.findOne({ email: req.params.email });
     // console.log(req.body.content);

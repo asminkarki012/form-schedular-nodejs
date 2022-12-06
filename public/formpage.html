@@ -9,6 +9,12 @@
     <title>FormPage</title>
   </head>
   <body>
+
+    <div class="flex justify-end m-4">  
+        <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" id="logout-btn">
+     Logout
+    </button>
+</div>
     <div class="loader-container">
       <button type="button" class="bg-indigo-500" disabled>
         <svg
@@ -68,7 +74,7 @@
           ></textarea>
         </div>
         <div class="flex gap-4">
-          <button type="reset" class="border hover:bg-gray-400 px-4 rounded-md">
+          <button type="reset" id="clear-btn"class="border hover:bg-gray-400 px-4 rounded-md">
             Clear
           </button>
           <button
@@ -100,7 +106,7 @@
     ></script>
     <script src="./js/moment.min.js"></script>
     <script src="./js/axios.min.js"></script>
-    <script src="./js/main.js"></script>
+    <script src="./js/userFormHandler.js"></script>
     <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
   </body>
 </html>
