@@ -110,9 +110,9 @@ function timeValidation() {
   const formMsg = document.getElementById("form-msg");
   const submitEmail = document.getElementById("submit-email");
   //getting time for validation
-  // let time = moment().format("hh mm ss a");
+  let time = moment().format("hh mm ss a");
 
-  let time = "05 40 00 pm";
+//   let time = "05 40 00 pm";
   time = time.split(" ");
   hh = parseInt(time[0]);
   mm = parseInt(time[1]);
