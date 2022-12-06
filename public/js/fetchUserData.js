@@ -12,9 +12,6 @@ function fetchData() {
       return response.json();
     })
     .then((data) => {
-      //   console.log(data);
-      //   console.log(data.data.email);
-      //   console.log(data.data.content[0].title);
       //start of dom manipulation
       const newRow = document.createElement("tr");
       newRow.classList.add(

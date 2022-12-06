@@ -2,7 +2,9 @@ const router = require("express").Router();
 const User = require("../models/User");
 const Form = require("../models/Form");
 const bcrypt = require("bcrypt");
-// const jwt = require("jsonwebtoken");
+const verifyToken = require("../controllers/middleware");
+const jwt = require("jsonwebtoken");
+const tokenList = {};
 
 // 401 Unauthorized
 // 400 Bad Request
@@ -45,9 +47,9 @@ router.post("/signin", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      return res
-        .status(400)
-        .json({ message: `<p class="text-red-500">User Doesnot Exists!! Please SignUp First</p>` });
+      return res.status(400).json({
+        message: `<p class="text-red-500">User Doesnot Exists!! Please SignUp First</p>`,
+      });
     }
     const validated = await bcrypt.compare(req.body.password, user.password);
     if (!validated) {
@@ -57,16 +59,51 @@ router.post("/signin", async (req, res) => {
     }
     // console.log(user);
     const { password, ...other } = user._doc;
-    // const token =  jwt.sign({ user: user }, "secretkey");
+    const accessToken = jwt.sign({ user: user }, "secretkey", {
+      expiresIn: "50s",
+    });
+
+    // const refreshToken = jwt.sign({ user: other }, "refreshtokensecret", {
+    //   expiresIn: "1h",
+    // });
+
+
+    // const response = {
+    //   token: token,
+    //   refreshToken: refreshToken,
+    // };
+
+    // tokenList[refreshToken] = response;
 
     res.status(200).json({
       message: `<p class="text-blue-500">${user.email} sign in successfully</p>`,
       data: user,
+      accessToken
     });
   } catch (err) {
     res
       .status(500)
       .json({ message: `<p class="text-red-500">${err.message}</p>` });
+  }
+});
+
+//refresh token
+router.post("/token", async (req, res) => {
+  const postData = req.body;
+  const user = await User.findOne({ email: postData.email });
+  const { password, ...other } = user._doc;
+  console.log(tokenList);
+
+  if (postData.refreshToken && postData.refreshToken in tokenList) {
+    const token = jwt.sign({ user: other }, "secretkey", { expiresIn: "50s" });
+    const response = {
+      token: token,
+    };
+    tokenList[postData.refreshToken].token = token;
+    console.log(tokenList);
+    res.status(200).json({ response, msg: "Refresh JWT working" });
+  } else {
+    res.status(403).json("Forbidden");
   }
 });
 

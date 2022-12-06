@@ -10,6 +10,20 @@ signInBtn.addEventListener("click", signInHandler);
 
 const responseMsg = document.getElementById("response-message");
 
+const loaderContainer = document.querySelector(".loader-container");
+window.addEventListener("load",()=>{
+  loaderContainer.style.display = "none";
+})
+//display loading spinner on page load
+// window.addEventListener("load", () => {
+//   document.body.style.display = "none";
+// window.addEventListener("transitionend"),()=>{
+//   document.body.style.display ="block";
+// }
+
+// });
+
+
 function signUpHandler(event) {
   event.preventDefault();
   // for signup
@@ -51,6 +65,7 @@ function signInHandler(event) {
     password: authPassword.value,
   };
   const url = `http://localhost:8000/index.html?email=${userData.email}`;
+  let checkResponseStatus = 0;
   // for signin
   fetch("/api/auth/signin", {
     method: "POST",
@@ -62,17 +77,23 @@ function signInHandler(event) {
     .then((response) => {
       //   const successMsg = document.getElementById("success-msg");
       //   successMsg.innerHTML = "data inserted successfully";
-      console.log(response.status);
-      if (response.status === 200) {
-        console.log("SIGN IN SUCCESSFULL");
-        window.location.href = url;
-      }
-
+      checkResponseStatus = response.status;
+      // if (response.status === 200) {
+      //   console.log("SIGN IN SUCCESSFULL");
+      // }
       return response.json();
     })
     .then((data) => {
       console.log("success", data);
-      responseMsg.innerHTML = `<p class="text-blue-500">${data.message}</p>`;
+      console.log("success", data.accessToken);
+      const accessToken = data.accessToken;
+
+      if (checkResponseStatus === 200 && accessToken) {
+        window.location.href = url;
+        localStorage.setItem("accessToken", data.accessToken);
+
+        responseMsg.innerHTML = `<p class="text-blue-500">${data.message}</p>`;
+      }
       // responseMsg.innerHTML = data.message
     })
     .catch((err) => {

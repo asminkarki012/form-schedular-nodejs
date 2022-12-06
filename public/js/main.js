@@ -1,6 +1,13 @@
 const { email } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
+
+let accessToken = localStorage.getItem("accessToken");
+
+const loaderContainer = document.querySelector(".loader-container");
+window.addEventListener("load", () => {
+  loaderContainer.style.display = "none";
+});
 console.log("this is for formsubmit route");
 console.log(email);
 function displayTime() {
@@ -8,11 +15,57 @@ function displayTime() {
   const getClock = document.getElementById("clock");
   getClock.innerHTML = clock;
 }
+
 const submitBtn = document.getElementById("submit-btn");
 submitBtn.addEventListener("click", formHandler);
+
+function routeHandler() {
+  const url = `http://localhost:8000/`;
+  console.log("Routehandler for every 5 second");
+
+
+  if (!accessToken) {
+    
+    window.location.href=url;
+
+
+  }
+
+    //call refresh token function to get access token
+
+  // fetch("/api/auth/token", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+
+  //   },
+  //   body: JSON.stringify(userData),
+  // })
+  //   .then((response) => {
+  //     return response.json();
+  //   })
+  //   .then((data) => {
+  //     console.log("success", data);
+
+
+  //   })
+  //   .catch((err) => {
+  //     console.error(err);
+  //     responseMsg.innerHTML = `<p class="text-red-500">${JSON.stringify(
+  //       err.message
+  //     )}</p>`;
+  //   });
+
+
+
+
+  //delete access token
+  localStorage.removeItem("accessToken");
+}
+routeHandler();
+
 function formHandler(e) {
   e.preventDefault();
-
   const responseMsg = document.getElementById("msg");
   const submitTitle = document.getElementById("submit-title");
   const submitDesc = document.getElementById("submit-desc");
@@ -25,6 +78,7 @@ function formHandler(e) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(userData),
   })
@@ -45,31 +99,6 @@ function formHandler(e) {
   submitTitle.value = "";
   submitDesc.value = "";
   responseMsg.innerHTML = "";
-  //   axios
-  //     .post("/api/formsubmit", {
-  //       userData: JSON.stringify(userData),
-  //     })
-  //     .then(function (response) {
-  //       console.log(response);
-  //     })
-  //     .catch(function (error) {
-  //       console.error(error);
-  //     });
-
-  //   const options = {
-  //       method: "POST",
-  //       url: "/api/formsubmit",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       data: {
-  //         userData: JSON.stringify(userData),
-  //       },
-  //     };
-  //     const response = await axios.reques(options);
-  //     console.log(response.data);
-
-  // window.location.reload();
 }
 
 function timeValidation() {
@@ -127,3 +156,8 @@ setInterval(() => {
 }, 1000);
 
 timeValidation();
+
+//checking access token every 50 second
+setInterval(() => {
+  routeHandler();
+}, 50000);
