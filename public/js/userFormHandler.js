@@ -42,34 +42,10 @@ function routeHandler() {
   }
   //call formhandler using initial accesstoken
   const userData = { email: email, refreshToken: refreshToken };
-
+ 
+  //get refresh token function to get new accesstoken
   getRefreshToken(userData);
 
-  //get refresh token function to get new accesstoken
-  // fetch("/api/auth/token", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(userData),
-  // })
-  //   .then((response) => {
-  //     return response.json();
-  //   })
-  //   .then((data) => {
-  //     console.log("success", data.response.accessToken);
-  //     accessToken = data.response.accessToken;
-
-  //     //set new accesstoken
-  //     localStorage.setItem("accessToken", accessToken);
-
-  //   })
-  //   .catch((err) => {
-  //     console.error(err.message);
-  //   });
-
-  //delete refresh token
-  // localStorage.removeItem("accessToken");
 }
 routeHandler();
 
@@ -118,9 +94,9 @@ function timeValidation() {
   const formMsg = document.getElementById("form-msg");
   const submitEmail = document.getElementById("submit-email");
   //getting time for validation
-  // let time = moment().format("hh mm ss a");
+  let time = moment().format("hh mm ss a");
 
-  let time = "05 40 00 pm";
+//   let time = "05 40 00 pm";
   time = time.split(" ");
   hh = parseInt(time[0]);
   mm = parseInt(time[1]);
