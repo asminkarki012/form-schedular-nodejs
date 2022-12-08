@@ -20,7 +20,9 @@ router.post("/signup", async (req, res) => {
     const newUser = new User({
       email: req.body.email,
       password: hashedPass,
+      admin:req.body.admin
     });
+
     const newForm = new Form({
       email: req.body.email,
     });
@@ -29,9 +31,11 @@ router.post("/signup", async (req, res) => {
 
     //setting up form db with Email
     const form = await newForm.save();
+    const {password,...other} = user._doc;
+
     res.status(200).json({
       message: `<p class="text-blue-500">${user.email} sign up successfully</p>`,
-      data: user,
+      data: other,
     });
   } catch (err) {
     res

@@ -8,11 +8,30 @@
     <title>FetchDataPage</title>
   </head>
   <body>
-    <div class="flex justify-end m-4">  
-        <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" id="logout-btn">
-     Logout
-    </button>
-</div>
+    <div class="flex justify-between m-4">
+        <h1
+          class="bg-white text-gray-800 font-semibold text-2xl py-2 px-4 border-gray-400 rounded"
+          id="adminpanel-header"
+        >
+          Admin Panel
+        </h1>
+
+        <button
+          class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+          id="exportcsv-btn"
+        >
+          ExportCSV
+        </button>
+        <button
+          class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+          id="logout-btn"
+        >
+          Logout
+        </button>
+    </div>
+
+    <div class="bg-gray-300 rounded-lg py-5 px-6 text-xl text-gray-800  mb-3 flex justify-center" role="alert" id="response-message">
+    </div>
 
     <div class="overflow-x-auto relative">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -41,7 +60,6 @@
     </div>
 
     <script src="./js/getRefreshToken.js"></script>
-    <script src="./js/fetchUserData.js"></script>
     <script src="./js//adminFetchData.js"></script>
   </body>
 </html>

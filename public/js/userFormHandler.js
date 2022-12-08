@@ -1,19 +1,17 @@
-// const { email } = Qs.parse(location.search, {
-//   ignoreQueryPrefix: true,
-// });
-
 const email = localStorage.getItem("email");
 let refreshToken = localStorage.getItem("refreshToken");
+const admin = localStorage.getItem("admin");
 
+console.log(typeof admin);
 const submitBtn = document.getElementById("submit-btn");
 const clearBtn = document.getElementById("clear-btn");
 const fetchDataBtn = document.getElementById("fetchdata-btn");
 const loaderContainer = document.querySelector(".loader-container");
 
-
 window.addEventListener("load", () => {
   loaderContainer.style.display = "none";
 });
+
 console.log("this is for formsubmit route");
 console.log(email);
 
@@ -23,42 +21,52 @@ function displayTime() {
   getClock.innerHTML = clock;
 }
 
-
 submitBtn.addEventListener("click", formHandler);
 
-
 function routeHandler() {
-  const url = `http://localhost:8000/`;
-  let accessToken = localStorage.getItem("accessToken");
-  const userData = { email: email, refreshToken: refreshToken };
   console.log("Routehandler for every 50 second");
+  const url = `http://localhost:8000/`;
 
-  if (!accessToken) {
+  if (admin === "true") {
+    console.log("Admin panel testing");
+    const adminHeader = document.getElementById("adminpanel-header");
+    adminHeader.innerHTML = "Admin Panel";
+  }
+
+  let accessToken = localStorage.getItem("accessToken");
+
+  //protecting route if no accesstoken is available
+  if (!accessToken || !refreshToken) {
     window.location.href = url;
     return;
   }
+  //call formhandler using initial accesstoken
+  const userData = { email: email, refreshToken: refreshToken };
+
+  getRefreshToken(userData);
 
   //get refresh token function to get new accesstoken
-  fetch("/api/auth/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      console.log("success", data.response.accessToken);
-      accessToken = data.response.accessToken;
+  // fetch("/api/auth/token", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(userData),
+  // })
+  //   .then((response) => {
+  //     return response.json();
+  //   })
+  //   .then((data) => {
+  //     console.log("success", data.response.accessToken);
+  //     accessToken = data.response.accessToken;
 
-      //set new accesstoken
-      localStorage.setItem("accessToken", accessToken);
-    })
-    .catch((err) => {
-      console.error(err.message);
-    });
+  //     //set new accesstoken
+  //     localStorage.setItem("accessToken", accessToken);
+
+  //   })
+  //   .catch((err) => {
+  //     console.error(err.message);
+  //   });
 
   //delete refresh token
   // localStorage.removeItem("accessToken");
@@ -81,7 +89,7 @@ function formHandler(e) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(userData),
   })
@@ -132,21 +140,22 @@ function timeValidation() {
   } else {
     formMsg.innerHTML = "You can only Fill this Form Between 5.30pm and 6pm";
     for (let i = 0; i < elements.length; i++) {
-      elements[i].readOnly = true;
+      elements[i].disabled = true;
       elements[0].value = email;
       elements[i].classList.add("bg-gray-200");
     }
-    submitBtn.disabled = true;
-    clearBtn.disabled = true;
-    fetchDataBtn.disabled = true;
   }
 }
 
-
 fetchDataBtn.addEventListener("click", () => {
-  const url = `http://localhost:8000/fetchdata.html`;
+  const userUrl = `http://localhost:8000/fetchdata.html`;
+  const adminUrl = `http://localhost:8000/adminfetchdata.html`;
 
-  window.location.href = url;
+  if (admin === "true") {
+    window.location.href = adminUrl;
+  } else {
+    window.location.href = userUrl;
+  }
 });
 
 //time validation check running every 5 minutes
@@ -161,7 +170,7 @@ setInterval(() => {
 
 timeValidation();
 
-//checking access token every 50 second
+//updating access token every 50 second as access token expires in 50s
 setInterval(() => {
   routeHandler();
 }, 50000);

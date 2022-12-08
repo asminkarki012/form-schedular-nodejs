@@ -1,6 +1,3 @@
-// const { email } = Qs.parse(location.search, {
-//   ignoreQueryPrefix: true,
-// });
 const email = localStorage.getItem("email");
 console.log("This is for fetchdata route");
 const refreshToken = localStorage.getItem("refreshToken")
@@ -12,36 +9,17 @@ function routeHandler() {
   const userData = { email: email, refreshToken: refreshToken };
   console.log("Routehandler for every 50 second");
 
-  if (!accessToken) {
+  if (!accessToken || !refreshToken) {
     window.location.href = url;
     return;
   }
 
-  //get refresh token function to get new accesstoken
-  fetch("/api/auth/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      console.log("success", data.response.accessToken);
-      accessToken = data.response.accessToken;
-
-      //set new accesstoken
-      localStorage.setItem("accessToken", accessToken);
-    })
-    .catch((err) => {
-      console.error(err.message);
-    });
-
+  getRefreshToken(userData);
   //delete refresh token
   // localStorage.removeItem("accessToken");
 }
+
+
 //fetch the data
 function fetchData() {
   const fetchDataList = document.getElementById("fetchdata-list");

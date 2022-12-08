@@ -30,10 +30,11 @@ window.addEventListener("load", () => {
 function signUpHandler(event) {
   event.preventDefault();
   // for signup
-  userData = {
+ const userData = {
     email: authEmail.value,
     password: authPassword.value,
   };
+
 
   fetch("/api/auth/signup", {
     method: "POST",
@@ -92,12 +93,17 @@ function signInHandler(event) {
       console.log("success", data);
       const accessToken = data.accessToken;
       const refreshToken = data.refreshToken;
+      const admin = data.data.admin;
+      const email = data.data.email;
+     console.log(admin);
 
       if (checkResponseStatus === 200 && accessToken && refreshToken) {
 
-        localStorage.setItem("email", userData.email);
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
+        localStorage.setItem("email", email);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken",refreshToken);
+        localStorage.setItem("admin", admin);
+
         responseMsg.innerHTML = `${data.message}`;
         window.location.href = url;
       }
