@@ -38,8 +38,8 @@ function fetchData() {
     .then((data) => {
       console.log(data.data[0].email);
       console.log(data.data[0].content[0]);
-      console.log("success",data);
-       
+      console.log("success", data);
+
       //start of dom manipulation to get all data
       for (let eachdata in data.data) {
         const newRow = document.createElement("tr");
@@ -86,13 +86,12 @@ function fetchData() {
         fetchDataList.appendChild(newRow);
         //   console.log(fetchDataList);
       }
-
     });
 }
 
 const exportCsvBtn = document.getElementById("exportcsv-btn");
 
-exportCsvBtn.addEventListener("click",() => {
+exportCsvBtn.addEventListener("click", () => {
   const responseMessage = document.getElementById("response-message");
   fetch(`/api/fetchdata/admin/exportcsv`, {
     method: "GET",
@@ -107,12 +106,10 @@ exportCsvBtn.addEventListener("click",() => {
       return response.json();
     })
     .then((data) => {
-      console.log("success",data.message);
-     responseMessage.innerHTML = data.message;
-  
-})
-responseMessage.innerHTML = "";
-
+      console.log("success", data.message);
+      responseMessage.innerHTML = data.message;
+    });
+  responseMessage.innerHTML = "";
 });
 
 fetchData();
@@ -126,7 +123,6 @@ setInterval(() => {
 
 const logoutBtn = document.getElementById("logout-btn");
 logoutBtn.addEventListener("click", () => {
-
   localStorage.clear();
   routeHandler();
 });

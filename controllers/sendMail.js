@@ -6,12 +6,19 @@ require("dotenv").config();
 const sendMailToUser = async () => {
   const formData = await Form.find();
   console.log("Cron scheduling activated");
+  // console.log(formData[0].email);
+  // console.log(latestcontent)
   for (let i in formData) {
-    console.log(formData[i]);
-    mailer(formData[i].email, formData[i]);
+    let latestcontent = formData[i].content.length - 1;
+    // console.log(formData[i].content[latestcontent]);
+    if (formData[i].content[latestcontent] !== undefined) {
+      console.log(formData[i].email, formData[i].content[latestcontent]);
+      mailer(formData[i].email, formData[i].content[latestcontent]);
+    }
   }
 };
-const mailer = async (recepient, formData) => {
+const mailer = async (recepient, content) => {
+  // console.log(content);
   const transporter = nodemailer.createTransport({
     service: "gmail",
     host: "smtp.gmail.com",
@@ -23,12 +30,12 @@ const mailer = async (recepient, formData) => {
   });
 
   const mailOptions = {
-    from: `GritFeatnotes@gritFeat.com`,
+    from: "GritFeatnotes@gritFeat.com",
     to: `${recepient}`,
     subject: "Today's Update",
     // text: `Your OTP code is ${otp} \n Expires in 5 minutes`,
-    html: `<h1>${formData.title}</h1>
-    <h3>${formData.desc}</h3>`,
+    html: `<h1>${content.title}</h1>
+    <h3>${content.desc}</h3>`,
   };
   await transporter.verify();
 

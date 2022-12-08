@@ -43,33 +43,10 @@ function routeHandler() {
   //call formhandler using initial accesstoken
   const userData = { email: email, refreshToken: refreshToken };
 
+  //get refresh token function to get new accesstoken
   getRefreshToken(userData);
 
-  //get refresh token function to get new accesstoken
-  // fetch("/api/auth/token", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(userData),
-  // })
-  //   .then((response) => {
-  //     return response.json();
-  //   })
-  //   .then((data) => {
-  //     console.log("success", data.response.accessToken);
-  //     accessToken = data.response.accessToken;
 
-  //     //set new accesstoken
-  //     localStorage.setItem("accessToken", accessToken);
-
-  //   })
-  //   .catch((err) => {
-  //     console.error(err.message);
-  //   });
-
-  //delete refresh token
-  // localStorage.removeItem("accessToken");
 }
 routeHandler();
 
@@ -94,14 +71,11 @@ function formHandler(e) {
     body: JSON.stringify(userData),
   })
     .then((response) => {
-      //   const successMsg = document.getElementById("success-msg");
-      //   successMsg.innerHTML = "data inserted successfully";
       return response.json();
     })
     .then((data) => {
       console.log("success", data);
-      responseMsg.innerHTML = `${data.message}`;
-      // responseMsg.innerHTML = data.message
+      responseMsg.innerHTML = data.message;
     })
     .catch((err) => {
       console.error(err);

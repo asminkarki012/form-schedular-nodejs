@@ -7,6 +7,7 @@ const verifyToken = require("../controllers/middleware");
 // to post form data in db
 router.post("/", verifyToken, async (req, res) => {
   try {
+    console.log("form submit route");
     // console.log(req.body);
     const formExists = await Form.findOne({ email: req.body.email });
   

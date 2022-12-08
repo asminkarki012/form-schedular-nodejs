@@ -35,9 +35,12 @@ app.get("/", (req, res) => {
 app.use(express.static(path.join(__dirname, "public")));
 //setting up cron tab to send mail everyday exact @ 5pm
 cron.schedule("45 17 * * *", () => {
+
   console.log("Running everday at 5.45pm");
   sendMailToUser();
+
 });
+
 
 const PORT = 8000 || process.env.PORT;
 app.listen(PORT, () => {
